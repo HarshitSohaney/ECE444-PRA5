@@ -3,7 +3,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 import pickle
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 # Load the saved model and vectorizer from pickle files
 with open('PRA5_models/basic_classifier.pkl', 'rb') as fid:
@@ -12,7 +12,7 @@ with open('PRA5_models/basic_classifier.pkl', 'rb') as fid:
 with open('PRA5_models/count_vectorizer.pkl', 'rb') as vd:
     vectorizer = pickle.load(vd)
 
-@app.route('/predict', methods=['POST'])
+@application.route('/predict', methods=['POST'])
 def predict():
     # Get the text input from the request
     data = request.get_json()
@@ -28,8 +28,7 @@ def predict():
     # Use the loaded model to make a prediction
     prediction = loaded_model.predict(transformed_text)[0]
 
-    result = 'REAL' if prediction == 1 else 'FAKE'
-    return jsonify({'prediction': result})
+    return jsonify({'prediction': prediction})
 
 if __name__ == '__main__':
-    app.run()
+    application.run()
